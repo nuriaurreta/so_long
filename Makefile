@@ -3,50 +3,51 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+         #
+#    By: nuria <nuria@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/09/19 16:58:12 by nuria             #+#    #+#              #
-#    Updated: 2023/11/21 18:26:00 by nurreta          ###   ########.fr        #
+#    Created: 2023/11/23 16:51:45 by nuria             #+#    #+#              #
+#    Updated: 2023/11/25 17:41:22 by nuria            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= so_long
+NAME = so_long.a
 
-SRCS	= so_long.c \
+SRC = src/, so_long.c
 
-OBJS	= $(SRCS:.c=.o)
+PRINTF_SRC = ft_printf/, ft_printf.c ft_strlen.c ft_printchar.c ft_print_str.c \
+	ft_print_pointer.c ft_print_integer.c ft_print_integer_unsig.c
 
-AR		= ar rc
+OBJS := $(SRC:%.c=%.o)
 
-CC		= gcc
+PRINTF_OBJS := $(PRINTF_SRC:%.c=%.o)
 
-RM		= rm -rf
+AR	= ar rc
 
-CFLAGS	= -Wall -Wextra -Werror -I./mlx/ -L./mlx/# -g3 -fsanitize=address
+CC = gcc
 
-NAME	= so_long.a
+CFLAGS = -Wextra -Wall -Werror -I/mlx/ -L./mlx/# -g3 -fsanitize=address
 
-all:	lib $(NAME)
+all: $(NAME)
 
-$(NAME):	$(SRC) $(OBJS) so_long.h 
-		$(CC) $(FLAGS) -lnlx -framework OpenGl -framework AppKit $(SRC) -o $(NAME)
+$(NAME): $(OBJS) $(PRINTF_OBJS) so_long.h
+	gcc $(CFLAGS) $^ -Lmlx -lmlx -framework OpenGL -framework AppKit $(SRC) -o $(NAME)
 
-%.o: %.CC
-		$(CC) -c $(FLAGS) -Imlx $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -Imlx -c $< -o $@
 
 execute:
-		./$(NAME) maps/map1.ber
+	./$(NAME) maps/map1.ber
 
 clean:
-		$(RM) $(OBJS) 
-		$(MAKE) -C minilibx_opengl clean
+	rm -f $(OBJS) $(PRINTF_OBJS)
+	$(MAKE) -C mlx clean
 
-fclean:	clean
-		$(RM) $(NAME)
+fclean: clean
+	rm -f $(NAME)
 
 re:	fclean all
 
 lib:
-	$(NAME) -C minilibx_opengl re
+	$(NAME) -C mlx re
 
-.PHONY:		all clean fclean re
+.PHONY:	all execute clean fclean re lib
