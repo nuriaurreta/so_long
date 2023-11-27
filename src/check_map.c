@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/22 20:01:17 by nuria             #+#    #+#             */
-/*   Updated: 2023/11/27 14:58:16 by nuria            ###   ########.fr       */
+/*   Created: 2023/11/27 18:22:33 by nuria             #+#    #+#             */
+/*   Updated: 2023/11/27 19:19:55 by nuria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "mlx/mlx.h"
+#include "../mlx/mlx.h"
+#include "../includes/so_long.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,9 +21,6 @@ typedef struct s_vars
 	char	**map;
 	char	*var;
 	size_t	len;
-	int		i;
-	int		j;
-
 }	t_vars;
 
 size_t	ft_strlen(const char *str)
@@ -48,46 +46,55 @@ int	check_map_name(char *argv)
 	return (1);
 }
 
-int	line_len(t_vars *var)
+int	check_rectangle(char **map)
 {
-	int	i;
+	int		y;
+	int		x;
+	int		count_x;
 
-	i = 0;
-	while(var->var[i] != '\n' && var->var[i] != '\0')
-		i++;
-	return (i);
-}
-
-int	check_rectangle(t_vars *var)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	var->len = line_len(var) - 1;
-	while (var->var)
+	x = 0;
+	y = 0;
+	count_x = 0;
+	while (map[0][count_x])
+		count_x++;
+	while (map[y] != NULL)
 	{
-		while (var->map[i][j] != '\n' && var->map[i][j] != '\0')
+		while (map[y][x])
+			x++;
+		if (x != count_x)
 		{
-			j++;
-			if (j != var->len)
-				return (1);
-			i++;
-			j = 0;
+			printf("Error\nMap must be a rectangle or a square\n");
+			return (1);
 		}
+		x = 0;
+		y++;
 	}
 	return (0);
 }
 
-int main(int argc, char **argv)
+int check_read(const char *file_path) 
 {
-	//t_vars	var;
-
-	if (argc != 2)
-		return (perror("Error: no map specified.\n"), 1);
-	if (check_map_name(argv[1]) == 1)
-		return (perror("Error: incorrect map format.\n"), 1);
-	printf("el mapa es correcto.n");
+	int fd;
+	char buffer[1];
+	ssize_t bytes_read;
+	
+	fd = open(file_path, O_RDONLY);
+	if (fd == -1)
+	{
+		return (printf("Error: could not open the file.\n"), 1);
+		close(fd);
+	}
+	bytes_read = read(fd, buffer, sizeof(buffer));
+	if (bytes_read == -1) 
+	{
+		return (printf("Error: could not read the file.\n"),1);
+		close(fd);
+	}
+	if (bytes_read == 0) 
+	{
+		return (printf("Error: empty map.\n"), 1);
+		close(fd);
+	}
+	close(fd);
 	return (0);
 }

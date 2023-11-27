@@ -6,7 +6,7 @@
 /*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 17:23:26 by nuria             #+#    #+#             */
-/*   Updated: 2023/11/23 16:18:49 by nuria            ###   ########.fr       */
+/*   Updated: 2023/11/27 15:28:21 by nuria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ft_printf(char const *str, ...)
 	return (len);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	unsigned long long	hex;
 	int					p;
@@ -77,4 +77,4 @@ int	main(void)
 	num = 4294967295;
 	ft_printf("%X, %d, %u, %s, %p, %c\n", hex, num2, num, string, &p, c);
 	printf("%llx, %d, %u, %s, %p, %c", hex, num2, num, string, &p, c);
-}
+} */
