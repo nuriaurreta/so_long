@@ -5,41 +5,39 @@
 #                                                     +:+ +:+         +:+      #
 #    By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/09/19 16:58:12 by nuria             #+#    #+#              #
-#    Updated: 2023/11/21 18:26:00 by nurreta          ###   ########.fr        #
+#    Created: 2023/11/29 07:12:28 by nuria             #+#    #+#              #
+#    Updated: 2023/12/13 17:34:43 by nurreta          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= so_long
 
-SRCS	= so_long.c \
+SRC		=	so_long.c libft_utils.c error.c map.c get_next_line.c load_xpm.c  \
+			draw_map.c status.c utils.c
+			
 
-OBJS	= $(SRCS:.c=.o)
-
-AR		= ar rc
+OBJS	= $(SRC:.c=.o)
 
 CC		= gcc
 
 RM		= rm -rf
 
-CFLAGS	= -Wall -Wextra -Werror -I./mlx/ -L./mlx/# -g3 -fsanitize=address
-
-NAME	= so_long.a
+CFLAGS	= -Wall -Wextra -Werror -I./mlx/ #-L./mlx/
 
 all:	lib $(NAME)
 
-$(NAME):	$(SRC) $(OBJS) so_long.h 
-		$(CC) $(FLAGS) -lnlx -framework OpenGl -framework AppKit $(SRC) -o $(NAME)
+$(NAME): $(SRC) $(OBJS) so_long.h
+		$(CC) $(CFLAGS) -Lmlx -lmlx -framework OpenGL -framework AppKit $(SRC) -o $(NAME)
 
 %.o: %.CC
-		$(CC) -c $(FLAGS) -Imlx $< -o $@
+	$(CC) -c $(CFLAGS) -Imlx $< -o $@
 
 execute:
-		./$(NAME) maps/map1.ber
+	./$(NAME) maps/map1ok.ber
 
 clean:
-		$(RM) $(OBJS) 
-		$(MAKE) -C minilibx_opengl clean
+	$(RM) $(OBJS)
+#	$(MAKE) -C mlx clean
 
 fclean:	clean
 		$(RM) $(NAME)
@@ -47,6 +45,6 @@ fclean:	clean
 re:	fclean all
 
 lib:
-	$(NAME) -C minilibx_opengl re
+	$(MAKE) -C mlx
 
-.PHONY:		all clean fclean re
+.PHONY:		all execute clean fclean re lib
