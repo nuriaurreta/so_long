@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 18:20:32 by nuria             #+#    #+#             */
-/*   Updated: 2023/12/14 17:00:29 by nurreta          ###   ########.fr       */
+/*   Updated: 2023/12/19 11:39:36 by nuria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	sl_error(int n, t_game *var)
 		sl_write_error("Error\nCould not open map file\n");
 	if (n == 2)
 		sl_write_error("Error\nEvery line of the map must have same length\n");
+	if (n == 3)
+		sl_write_error("Error\nCollectibles and exit must be accessible\n");
 	if (n == 4)
 		sl_write_error("Error\nMap must be surrounded by walls (1)\n");
 	if (n == 5)
@@ -55,7 +57,7 @@ void	sl_destroy(t_game *var)
 
 void	sl_free_map(t_game *var)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < var->m.map_y)
@@ -70,11 +72,9 @@ void	sl_free_map(t_game *var)
 int	sl_exit(int e, t_game *var)
 {
 	if (e == 1)
-		printf("%sYOU WON! :)\nMOVEMENTS: %d\n%s", G, var->key_count + 1, NC);
+		printf("%sYOU WON! :)\nMOVEMENTS: %lu\n%s", G, var->key_count + 1, NC);
 	if (e == 2)
 		printf("%sYOU QUIT THE GAME WITHOUT FINISHING! :(\n%s", Y, NC);
-	//if (e == 3)
-	//	printf("%sYOU LOSE! :(\n%s", R, NC);
 	if (var->m.map)
 		sl_free_map(var);
 	if (var->move)

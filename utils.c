@@ -6,7 +6,7 @@
 /*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:46:09 by nurreta           #+#    #+#             */
-/*   Updated: 2023/12/13 17:36:53 by nurreta          ###   ########.fr       */
+/*   Updated: 2023/12/19 15:50:23 by nurreta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ void	sl_init_vars(t_game *var)
 	var->m.c_count = 0;
 	var->m.e_count = 0;
 	var->m.p_count = 0;
+	var->exit = 0;
 }
 
-int	sl_strlen(const char *str)
+size_t	sl_strlen(const char *str)
 {
 	size_t	i;
 
