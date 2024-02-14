@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:10:39 by nuria             #+#    #+#             */
-/*   Updated: 2023/12/19 17:23:50 by nurreta          ###   ########.fr       */
+/*   Updated: 2023/12/22 19:50:44 by nuria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	sl_get_map(int fd, char *argv, t_game *var)
 	res = get_next_line(fd, &line);
 	var->m.map_x = sl_strlen(line);
 	var->m.map_y = 0;
-	while(res >= 0)
+	while (res >= 0)
 	{
 		free(line);
 		line = NULL;
@@ -66,14 +66,14 @@ void	sl_read_map(int fd, char *argv, t_game *var)
 
 void	sl_check_walls(t_game	*var)
 {
-	size_t	y;
-	size_t	x;
+	int	y;
+	int	x;
 
 	y = 1;
 	x = 0;
 	while (x < var->m.map_x)
 	{
-		if (var->m.map[0][x] != '1' 
+		if (var->m.map[0][x] != '1'
 			|| var->m.map[var->m.map_y - 1][x] != '1')
 			sl_error(4, var);
 		x++;
@@ -88,7 +88,7 @@ void	sl_check_walls(t_game	*var)
 	sl_check_interior(y, x, var);
 }
 
-void	sl_check_interior(size_t y, size_t x, t_game *var)
+void	sl_check_interior(int y, int x, t_game *var)
 {
 	y = 1;
 	x = 1;
@@ -113,77 +113,4 @@ void	sl_check_interior(size_t y, size_t x, t_game *var)
 		sl_error(6, var);
 	if (var->m.c_count < 1)
 		sl_error(7, var);
-	sl_flood(var, y, x);
 }
-
-void	sl_check_path(size_t y, size_t x, t_game *var)
-
-
-/* int	sl_check_path(t_game *var, size_t y, size_t x)
-{
-	if (var->m.map[y][x] == '1')
-		return (0);
-	if (var->m.map[y][x] == 'C')
-		var->m.c_count--;
-	if (var->m.map[y][x] == 'E')
-	{
-		var->exit = 1;
-		return (0);
-	}
-	var->m.map[y][x] ='1';
-	if (sl_check_path(var, y + 1, x))
-		return (1);
-	if (sl_check_path(var, y - 1, x))
-		return (1);
-	if (sl_check_path(var, y, x + 1))
-		return (1);
-	if (sl_check_path(var, y, x - 1))
-		return (1);
-	return (0);
-} */
-
-void	sl_check_path(t_game *var, size_t y, size_t x)
-{
-	if (var->m.map[y][x] == '1' || x < 1 || y < 1 || x > var->size_x
-		|| y > var->size_y)
-		return ;
-	if (var->m.map[y][x] == 'C')
-		var->m.c_count--;
-	if (var->m.map[y][x] == 'E')
-	{
-		var->exit = 1;
-		return ;
-	}
-	if (var->m.map[y][x] != '1') 
-	{
-		var->m.map[y][x] += 40;
-		sl_check_path(var, y + 1, x);
-		sl_check_path(var, y - 1, x);
-		sl_check_path(var, y, x + 1);
-		sl_check_path(var, y, x - 1);
-		if (var->exit != 1 || var->m.c_count != 0)
-			sl_error(3, var);
-	}
-	var->m.map[y][x] -= 40;
-}
-
-/* void	sl_check_path(t_game *var, size_t y, size_t x)
-{
-	if (var->m.map[y][x] == '1')
-		return ;
-	if (var->m.map[y][x] == 'C')
-		var->m.c_count--;
-	if (var->m.map[y][x] == 'E')
-	{
-		var->exit = 1;
-		return ;
-	}
-	var->m.map[y][x] += 40;
-	sl_check_path(var, y + 1, x);
-	sl_check_path(var, y - 1, x);
-	sl_check_path(var, y, x + 1);
-	sl_check_path(var, y, x - 1);
-	if (var->exit != 1 || var->m.c_count != 0)
-	sl_error(3, var);
-	var->m.map[y][x] -= 40;
-} */

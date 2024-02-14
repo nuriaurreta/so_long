@@ -3,71 +3,99 @@
 /*                                                        :::      ::::::::   */
 /*   path_checker.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/19 10:29:04 by nuria             #+#    #+#             */
-/*   Updated: 2023/12/19 16:40:45 by nurreta          ###   ########.fr       */
+/*   Created: 2023/12/22 16:06:09 by nuria             #+#    #+#             */
+/*   Updated: 2023/12/22 20:03:15 by nuria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	sl_free_temp(char **map, size_t size_y)
+void	sl_restore_map(char **map, int y, int x, t_game *var)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < size_y)
+	if (map[y][x] == '1' || map[y][x] < 81)
+		return ;
+	if (map[y][x] == 'E')
 	{
-		free(map[i]);
-		i++;
+		map[y][x] = map[y][x] - 40;
+		return ;
 	}
-	free(map);
+	map[y][x] = map[y][x] - 40;
+	if (y > 0)
+		sl_restore_map(map, y - 1, x, var);
+	if (y < var->m.map_y - 1)
+		sl_restore_map(map, y + 1, x, var);
+	if (x > 0)
+		sl_restore_map(map, y, x - 1, var);
+	if (x < var->m.map_x - 1)
+		sl_restore_map(map, y, x + 1, var);
 }
 
-int	sl_check_path(t_game *var, size_t y, size_t x)
+void	sl_floodfill(char **map, int y, int x, t_game *var)
 {
-	if (var->m.map[y][x] == '1')
-		return (0);
-	if (var->m.map[y][x] == 'C')
-		var->m.c_count--;
-	if (var->m.map[y][x] == 'E')
+	if (map[y][x] == '1' || map[y][x] > 80)
+		return ;
+	if (map[y][x] == 'E')
 	{
-		var->exit = 1;
-		return (0);
+		map[y][x] = map[y][x] + 40;
+		return ;
 	}
-	var->m.map[y][x] ='1';
-	if (sl_check_path(var, y + 1, x))
-		return (1);
-	if (sl_check_path(var, y - 1, x))
-		return (1);
-	if (sl_check_path(var, y, x + 1))
-		return (1);
-	if (sl_check_path(var, y, x - 1))
-		return (1);
+	map[y][x] = map[y][x] + 40;
+	if (y > 0)
+		sl_floodfill(map, y - 1, x, var);
+	if (y < var->m.map_y - 1)
+		sl_floodfill(map, y + 1, x, var);
+	if (x > 0)
+		sl_floodfill(map, y, x - 1, var);
+	if (x < var->m.map_x - 1)
+		sl_floodfill(map, y, x + 1, var);
+}
+
+int	sl_check_route(t_game *var)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < var->m.map_y)
+	{
+		x = 0;
+		while (x < var->m.map_x)
+		{
+			if (var->m.map[y][x] == 'P' || var->m.map[y][x] == 'E'
+				|| var->m.map[y][x] == 'C')
+				sl_error(3, var);
+			x++;
+		}
+		y++;
+	}
 	return (0);
 }
 
-void	sl_flood(t_game *var, size_t x, size_t y)
+int	sl_check_pos(t_game *var)
 {
-	t_game	temp;
-	size_t	i;
+	int	y;
+	int	x;
 
-	temp.size_y = var->size_y;
-	temp.size_x = var->size_x;
-	temp.m.c_count = var->m.c_count;
-	temp.exit = 0;
-	temp.m.map = (char **)malloc(temp.size_y * sizeof(char *));
-	if (!temp.m.map)
-		sl_error(8, var);
-	i = 0;
-	while (i < temp.size_y)
+	y = 0;
+	while (y < var->m.map_y)
 	{
-		temp.m.map[i] = sl_strdup(var->m.map[i]);
-		i++;
+		x = 0;
+		while (x < var->m.map_x)
+		{
+			if (var->m.map[y][x] == 'P')
+			{
+				sl_floodfill(var->m.map, y, x, var);
+				break ;
+			}
+			x++;
+		}
+		if (x < var->m.map_x)
+			break ;
+		y++;
 	}
-	sl_check_path(var, y, x);
-	if (temp.exit != 1 || temp.m.c_count != 0)
-		sl_error(3, var);
-	sl_free_temp(temp.m.map, temp.size_y);
+	sl_check_route(var);
+	sl_restore_map(var->m.map, y, x, var);
+	return (0);
 }
