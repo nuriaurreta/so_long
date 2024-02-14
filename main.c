@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 17:49:41 by nuria             #+#    #+#             */
-/*   Updated: 2023/12/19 11:31:00 by nuria            ###   ########.fr       */
+/*   Updated: 2024/01/02 16:08:04 by nurreta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void sl_check_ber(char *argv, t_game *var)
+void	sl_check_ber(char *argv, t_game *var)
 {
 	int	len;
-	
+
 	len = sl_strlen(argv) - 1;
 	if (len < 5)
 		sl_error(9, var);
-	if (argv[len] != 'r' || argv[len - 1] != 'e' || argv[len - 2] != 'b' 
+	if (argv[len] != 'r' || argv[len - 1] != 'e' || argv[len - 2] != 'b'
 		|| argv[len - 3] != '.')
 		sl_error(9, var);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_game	var;
 	int		fd;
@@ -37,6 +37,7 @@ int main(int argc, char **argv)
 		if (fd == -1)
 			sl_error(1, &var);
 		sl_get_map(fd, argv[1], &var);
+		sl_check_pos(&var);
 		var.ptr = mlx_init();
 		var.win = mlx_new_window(var.ptr, var.size_x, var.size_y, "so_long");
 		sl_load_xpm(&var);
@@ -45,7 +46,6 @@ int main(int argc, char **argv)
 		mlx_key_hook(var.win, sl_key_input, (void *) &var);
 		mlx_loop(&var.ptr);
 	}
-	else
-		sl_error(0, &var);
+	sl_error(0, &var);
 	return (0);
 }

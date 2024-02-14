@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:46:09 by nurreta           #+#    #+#             */
-/*   Updated: 2023/12/19 15:50:23 by nurreta          ###   ########.fr       */
+/*   Updated: 2023/12/22 20:03:42 by nuria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,17 @@ void	sl_init_vars(t_game *var)
 	var->size_y = 0;
 	var->time = 0;
 	var->key_count = 0;
-	var->coun = sl_strdup("0");
-	var->move = sl_strdup("TOTAL MOVEMENTS: ");
 	var->m.map = NULL;
 	var->m.map_x = 0;
 	var->m.map_y = 0;
 	var->m.c_count = 0;
 	var->m.e_count = 0;
 	var->m.p_count = 0;
-	var->exit = 0;
 }
 
-size_t	sl_strlen(const char *str)
+int	sl_strlen(const char *str)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (str[i] != '\0')

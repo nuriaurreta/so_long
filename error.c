@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuria <nuria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 18:20:32 by nuria             #+#    #+#             */
-/*   Updated: 2023/12/19 11:39:36 by nuria            ###   ########.fr       */
+/*   Updated: 2024/01/08 15:25:07 by nurreta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	sl_destroy(t_game *var)
 
 void	sl_free_map(t_game *var)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (i < var->m.map_y)
@@ -77,8 +77,6 @@ int	sl_exit(int e, t_game *var)
 		printf("%sYOU QUIT THE GAME WITHOUT FINISHING! :(\n%s", Y, NC);
 	if (var->m.map)
 		sl_free_map(var);
-	if (var->move)
-		free(var->move);
 	if (var->ptr)
 		sl_destroy(var);
 	exit(0);

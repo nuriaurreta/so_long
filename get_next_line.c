@@ -6,13 +6,13 @@
 /*   By: nurreta <nurreta@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 18:37:38 by nuria             #+#    #+#             */
-/*   Updated: 2023/12/13 15:50:34 by nurreta          ###   ########.fr       */
+/*   Updated: 2024/01/02 18:08:18 by nurreta          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	sl_line_length(char *str)
+static int	sl_line_length(char *str)
 {
 	int	len;
 
@@ -22,7 +22,7 @@ int	sl_line_length(char *str)
 	return (len);
 }
 
-int	sl_read_line(int fd, char **line, char **saved, int file_size)
+static int	sl_read_line(int fd, char **line, char **saved, int file_size)
 {
 	char	*aux;
 	int		len;
